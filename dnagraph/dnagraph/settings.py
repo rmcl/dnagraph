@@ -156,3 +156,8 @@ LOGGING = {
         },
     }
 }
+
+
+
+REPEATMASKER_OUTPUT_DIR=PROJECT_ROOT+'/static/repeatmasker'
+REPEATMASKER_EXEC='/home/rmcl/dnaseq/repeatmasker/RepeatMasker/RepeatMasker'

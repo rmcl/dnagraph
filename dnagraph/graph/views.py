@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 
+import repeatmasker
 import graph.models as graph_models
 
 def _get_first_child_sequence(sequence, children, start_offset = 0):
@@ -20,6 +21,12 @@ def _get_first_child_sequence(sequence, children, start_offset = 0):
         raise Exception('Could not find anymore children')
     
     return earliest_start_pos, earliest_child
+
+def exec_repeatmasker(request, node_id):
+    node = graph_models.Node.objects.get(pk = node_id)
+    
+    return HttpResponse( repeatmasker.run_repeatmasker(node))
+
 
 def show(request, node_id ):
     
@@ -77,11 +84,13 @@ def show(request, node_id ):
         # no children so just display whole thing
         annotated_seq = n.sequence
     
-    print len(bla), len(n.sequence)
+    
+    repeatmasker_tbl = repeatmasker.get_table(n)
     
     return render_to_response('graph/show.html', {
         'node': n,
         'annotated_seq': annotated_seq,
         'children': children_ordered,
         'parents': n.parents.all(),
+        'repeatmasker_tbl': repeatmasker_tbl,
     }, context_instance=RequestContext(request))

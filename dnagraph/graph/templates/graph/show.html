@@ -1,23 +1,27 @@
 <html>
-<body>
+<head>
+<link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
 <script src="/static/js/jquery-1.8.2.min.js" type="text/javascript"></script>
+<script src="/static/bootstrap/js/bootstrap.js"></script>
+</head>
+<body>
 
 
 
 <style>
 .seq {
     font-family: "Courier New", Courier, monospace;
-    width:800px;
+    #width:800px;
     word-wrap: break-word;
     letter-spacing: 10px;
     font-size:16px;
     font-weight:bold;
 }
 .sidebar {
-    position: fixed;
-    right:0;
-    top: 0;
-    width:400px;
+    #position: fixed;
+    #right:0;
+    #top: 0;
+    #width:400px;
 }
 .seq0 { color:red; }
 .seq1 { color:yellow; }
@@ -28,31 +32,51 @@
 
 </style>
 
-{% autoescape off %}
-<div class="seq">{{annotated_seq}}</div>
-{% endautoescape %}
+<div class="container-fluid">
 
-<div class="sidebar">
-Children:
-<ul>
-    {% for c in children %}
-        
-        <li><span class="seq{{forloop.counter0}}">node</span> {{c.pk}} <a href="#seq{{c.pk}}">anchor</a> <a href="{% url show_node c.pk %}">goto page</a></a> {{c.sequence}}</li>
-    {% endfor %}
-</ul>
+<div class="span10">
+  <div class="tabbable"> <!-- Only required for left/right tabs -->
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#tab1" data-toggle="tab">Sequence + Graph</a></li>
+      <li><a href="#tab2" data-toggle="tab">RepeatMasker</a></li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="tab1">
+	
+	{% autoescape off %}
+	<div class="seq">{{annotated_seq}}</div>
+	{% endautoescape %}
 
-Parent:
-<ul>
-    {% for p in parents %}
-        <li><a href="{% url show_node p.pk %}">node {{p.pk}}</a></li>
-    {% endfor %}
-</ul>
+      </div>
+      <div class="tab-pane" id="tab2">
+	
+	<pre>
+	  {{repeatmasker_tbl}}
+	</pre>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="span4">
+  <div class="sidebar well">
+
+    <ul class="nav nav-list">
+      <li class="nav-header">Children</li>
+      
+      {% for c in children %}
+      <li><div class="childelem"><span class="seq{{forloop.counter0}}">Node {{c.pk}}</span> <a href="#seq{{c.pk}}">anchor</a> <a href="{% url show_node c.pk %}">goto page</a></a></div></li>
+      {% endfor %}
+
+      <li class="nav-header">Parents</li>
+
+      {% for p in parents %}
+      <li><a href="{% url show_node p.pk %}">node {{p.pk}}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
 </div>
 
-<div class="repeatmasker">
-<h1>Repeast Masker</h1>
 </div>
-
-
 </body>
 </html>
