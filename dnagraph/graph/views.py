@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response
 import repeatmasker
 import graph.models as graph_models
 
+
 def _get_first_child_sequence(sequence, children, start_offset = 0):
     earliest_start_pos = len(sequence)
     earliest_child = None
@@ -25,7 +26,8 @@ def _get_first_child_sequence(sequence, children, start_offset = 0):
 def exec_repeatmasker(request, node_id):
     node = graph_models.Node.objects.get(pk = node_id)
     
-    return HttpResponse( repeatmasker.run_repeatmasker(node))
+    repeatmasker.run_repeatmasker_if_not_already_queued(node)
+    return HttpResponse( 'queued repeat masker if not already queued.')
 
 
 def show(request, node_id ):
@@ -86,6 +88,7 @@ def show(request, node_id ):
     
     
     repeatmasker_tbl = repeatmasker.get_table(n)
+    repeatmaskedseq = repeatmasker.get_masked(n)
     
     return render_to_response('graph/show.html', {
         'node': n,
@@ -93,4 +96,5 @@ def show(request, node_id ):
         'children': children_ordered,
         'parents': n.parents.all(),
         'repeatmasker_tbl': repeatmasker_tbl,
+        'repeatmaskedseq': repeatmaskedseq,
     }, context_instance=RequestContext(request))

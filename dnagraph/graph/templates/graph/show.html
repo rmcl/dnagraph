@@ -44,8 +44,12 @@
       <div class="tab-pane active" id="tab1">
 	
 	{% autoescape off %}
-	<div class="seq">{{annotated_seq}}</div>
+	<div class="seq">{{node.sequence}}</div>
+	<br/>
+	<div class="seq repeatsmasker">{{repeatmaskedseq}}</div>
 	{% endautoescape %}
+
+
 
       </div>
       <div class="tab-pane" id="tab2">

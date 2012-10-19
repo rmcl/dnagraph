@@ -7,6 +7,8 @@ class Node(models.Model):
     locations = models.CharField(max_length=100)
     sequence = models.TextField()
 
+    ran_repeatmasker = models.IntegerField(null=True,blank=True)
+    
 
     def __unicode__(self):
         return str(self.id)
